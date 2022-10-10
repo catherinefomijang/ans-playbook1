@@ -1,0 +1,38 @@
+---
+- hosts: all 
+  become: yes 
+  ignore_errors: yes 
+  tasks: 
+      - name: Create user
+        user: 
+            name: catherine 
+            comment: Catherine Fomijang 
+            group: root 
+      - name: Create a file 
+        file: 
+            path: /opt/config
+            state: touch 
+            mode: '0644'
+      - name: Create a directory 
+        file: 
+            path: /opt/ans-dir
+            state: directory 
+            mode: '0755'
+      - name: Create a group
+        group: 
+          name: groupadd 
+          state: present 
+      - name: Installing Apache 
+        yum: 
+          name: httpd
+          state: latest
+      - name: Starting the httpd daemon 
+        service: 
+              name: httpd
+              state: started
+              enabled: yes 
+      - name: Download Software 
+        get_url: 
+          url: https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+          dest: /opt
+          mode: '0644'
